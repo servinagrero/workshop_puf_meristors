@@ -1,0 +1,1447 @@
+\documentclass[10pt, aspectratio=169, t]{beamer}
+\mode<presentation>{}
+
+\usepackage{csquotes}
+\usepackage{polyglossia}
+\setdefaultlanguage{spanish}
+\setotherlanguages{english}
+
+\usepackage{fontspec}
+\setsansfont{TeX Gyre Heros}[Scale=MatchLowercase] % Helvetica alternative
+\setmonofont{JetBrains Mono}[Scale=0.85]
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{emoji}
+\setemojifont{Noto Color Emoji}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\graphicspath{{./figures}}
+\addtolength{\textfloatsep}{-1em}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{siunitx}
+\usepackage{multicol}
+% \usepackage{enumitem}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta, calc,decorations.markings}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{tabularx}
+\usepackage{calc}
+\tcbuselibrary{skins, breakable}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% --- COLOR DEFINITIONS (Rubric Palette + Legacy Highlights) ---
+\definecolor{RubricRed}{HTML}{A80000}    % Primary Highlight (Rubrication)
+\definecolor{RubricBlack}{HTML}{1D1D1D}  % Structural Elements
+\definecolor{RubricWhite}{HTML}{FFFFFF}  % Background
+\definecolor{RubricSepia}{HTML}{FBF5EA}  % Code Background
+\definecolor{RubricGray}{HTML}{757575}   % Secondary Text
+\colorlet{highlight}{RubricRed}           % Mapping legacy name to theme color
+
+\usepackage[bibstyle=nature, sorting=none, backend=biber]{biblatex}
+\addbibresource{/home/vinagres/Documents/Bibliography/References.bib}
+
+\usetheme{default}
+\useinnertheme{default}
+\useoutertheme{default}
+\usecolortheme{default}
+
+\AtBeginSection[]
+{
+\begin{frame}{Table of Contents}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Fonts and colors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \setbeamercolor{palette quaternary}{fg=white,bg=tima_black}
+% \setbeamercolor{titlelike}{parent=palette quaternary}
+\setbeamercolor{titlelike}{fg=highlight}
+
+\setbeamercolor{section in toc}{fg=highlight}
+\setbeamerfont{subsection in toc}{size=\Fontvi}
+\setbeamerfont{subsubsection in toc}{size=\Fontvi}
+% Set color for non-current sections
+\setbeamercolor{section in toc shaded}{fg=gray}
+
+% \setbeamerfont{titlelike}{family=\fontspec{Source Serif 4},size=\Huge}
+% \setbeamerfont{titlelike}{family=\ttfamily,size=\Large,series=\bfseries}
+\setbeamerfont{title}{family=\fontspec{Inter Display},size=\large,series=\bfseries}
+\setbeamercolor{title}{fg=highlight}
+
+\setbeamerfont{section title text}{family=\fontspec{Inter Display},series=\bfseries,size=\Large}
+\setbeamercolor{section title text}{fg=highlight}
+
+\setbeamercolor{section page}{fg=white, bg=highlight}
+
+\setbeamerfont{frametitle}{size=\normalsize,parent=title}
+\setbeamercolor{frametitle}{fg=highlight}
+
+\setbeamerfont{author}{size=\footnotesize}
+\setbeamercolor{institute}{fg=highlight}
+\setbeamerfont{institute}{family=\fontspec{Source Sans 3}}
+\setbeamercolor{institute}{fg=black!60}
+
+% \setbeamerfont{section title}{family=\fontspec{SF Mono},size=\large,series=\bfseries}
+\setbeamercolor{section title}{fg=white}
+
+\setbeamerfont{part title}{size=\Large,parent=title}
+\setbeamercolor{part title}{fg=white}
+
+
+% Define font sizes for bibliography
+\setbeamerfont{bibliography entry author}{size=\scriptsize}
+\setbeamerfont{bibliography entry title}{size=\scriptsize}
+\setbeamerfont{bibliography entry location}{size=\scriptsize}
+\setbeamerfont{bibliography entry note}{size=\scriptsize}
+
+\setbeamerfont{caption}{size=\footnotesize}
+% \setbeamerfont{caption name}{series=\bfseries}
+\setbeamerfont{description item}{series=\bfseries}
+
+\setbeamerfont{footnote}{size=\tiny}
+
+\setbeamercolor{section in head/foot}{fg=highlight}
+
+\setbeamerfont{page number in head/foot}{family=\ttfamily,size=\scriptsize}
+\setbeamercolor{page number in head/foot}{fg=highlight}
+
+\setbeamertemplate{section in toc}{\inserttocsection\par}
+
+\setbeamertemplate{navigation symbols}{}
+
+% Change the font size for footnotes
+\makeatletter
+\renewcommand{\footnotesize}{\tiny}
+\makeatother
+
+\setbeamertemplate{bibliography entry title}{}
+\setbeamertemplate{bibliography entry location}{}
+\setbeamertemplate{bibliography entry note}{}
+
+
+% --- PROGRESS BAR LOGIC (Reveal.js Style) ---
+% \makeatletter
+% \newdimen\progressbar@pbwidth
+% \progressbar@pbwidth=\paperwidth % Full width for brutalist look
+
+% \setbeamertemplate{footline}{
+%   \ifnum\insertframenumber>1
+%     \begin{beamercolorbox}[wd=.9\paperwidth, ht=4ex, dp=2ex, leftskip=1cm, rightskip=1cm]{footline}
+%         \usebeamerfont{page number in head/foot}
+%         \usebeamercolor[fg]{RubricGray}
+%         % Progress Bar Container
+%         \begin{tikzpicture}[remember picture, overlay]
+%             \node[anchor=south west, yshift=0.2pt] at (current page.south west) {
+%                 \begin{tikzpicture}
+%                     \fill[RubricGray!10] (0,0) rectangle (.9\paperwidth, 0.15cm);
+%                     \fill[RubricRed] (0,0) rectangle (\insertframenumber/\inserttotalframenumber*.9\paperwidth, 0.15cm);
+%                 \end{tikzpicture}
+%             };
+%         \end{tikzpicture}
+%         \insertdate \hfill \textbf{\insertframenumber}
+%     \end{beamercolorbox}
+%   \fi
+% }
+% \makeatother
+
+
+\makeatletter
+\newcount\progressbar@tmpcounta% auxiliary counter
+\newcount\progressbar@ratio% auxiliary counter
+\newdimen\progressbar@pbwidth %progressbar width
+\newdimen\progressbar@current % auxiliary dimension
+
+% make the progress bar go across the screen
+\progressbar@pbwidth=.8\textwidth
+
+\setbeamertemplate{frame footer}{
+  \pgfmathsetmacro\progressbar@ratio{\progressbar@pbwidth /\inserttotalframenumber} % Compute progress ratio as a fraction
+  \pgfmathsetlength{\progressbar@current}{\progressbar@ratio * \insertframenumber}
+  \begin{tikzpicture}[remember picture,overlay]
+    \draw[yshift=0.15em, fill=highlight!20,draw=none, rounded corners=0.25pt] (0cm,0cm) rectangle(\progressbar@pbwidth,0.5em);
+    \draw[yshift=0.15em, fill=highlight,draw=none, rounded corners=0.25pt] (0cm,0cm) rectangle(\progressbar@current,0.5em);
+    % \draw[yshift=0.5ex, left color=highlight, right color=highlight!30!orange,draw=none, rounded corners=0.5pt] (0cm,0cm) rectangle(\progressbar@current,0.5ex);
+  \end{tikzpicture}
+  \hspace*{\progressbar@pbwidth}
+  \hspace*{0em}\insertframenumber
+}
+
+\makeatother
+
+% \setbeamertemplate{frame numbering}{\insertframenumber/\inserttotalframenumber}
+\setbeamertemplate{frame numbering}{\insertframenumber}
+\setbeamertemplate{footline}{%
+  \begin{beamercolorbox}[wd=\textwidth, sep=2.5ex]{footline}%
+    \usebeamerfont{page number in head/foot}%
+    \usebeamercolor[fg]{page number in head/foot}%
+    \usebeamertemplate*{frame footer}
+    \hfill%
+    % \usebeamertemplate*{frame numbering}
+    \insertdate
+  \end{beamercolorbox}%
+}
+
+
+% --- FRAME TITLE ---
+\setbeamertemplate{frametitle}{
+    \nointerlineskip
+    \begin{beamercolorbox}[sep=0.5cm, wd=\paperwidth]{frametitle}
+        \usebeamerfont{frametitle}\textbf{\MakeUppercase{\insertframetitle}}
+        \par\vspace{-0.25cm}
+        \begin{tikzpicture}
+            \fill[RubricBlack] (0,0) rectangle (\textwidth, 0.05);
+        \end{tikzpicture}
+    \end{beamercolorbox}
+}
+
+% --- ITEMIZE BULLETS (Pixel-Art Style) ---
+\setbeamertemplate{itemize item}{
+    \begin{tikzpicture}[scale=0.8]
+        \fill[highlight] (0, 0) rectangle(0.1, 0.1);
+        \fill[highlight] (0.1, 0.1) rectangle(0.2, 0.2);
+        \fill[highlight] (0, 0.2) rectangle(0.1, 0.3);
+    \end{tikzpicture}
+}
+\setbeamertemplate{itemize subitem}{
+    \begin{tikzpicture}[scale=0.5]
+        \fill[highlight] (0, 0) rectangle(0.1, 0.1);
+        \fill[highlight] (0.1, 0.1) rectangle(0.2, 0.2);
+        \fill[highlight] (0, 0.2) rectangle(0.1, 0.3);
+    \end{tikzpicture}
+}
+
+% --- SECTION PAGE ---
+\setbeamertemplate{section page}{
+    \vfill
+    \begin{minipage}{0.8\textwidth}
+        {\tiny\color{RubricGray} SECTION \insertsectionnumber}\\[1ex]
+        {\color{RubricRed}\huge\textbf{\MakeUppercase{\insertsection}}}
+        \par\vspace{0.4cm}
+        \begin{tikzpicture}
+            \fill[RubricBlack] (0,0) rectangle (\textwidth, 0.2);
+        \end{tikzpicture}
+    \end{minipage}
+    \vfill
+}
+
+% --- COMPONENTS ---
+\newtcolorbox{codebox}{
+    enhanced, boxrule=1pt, colback=RubricSepia, colframe=RubricBlack,
+    sharp corners, leftrule=10pt, fontupper=\ttfamily\small, boxsep=10pt, left=15pt
+}
+
+\newcommand{\impactslide}[2][RubricRed]{
+    {\setbeamercolor{background canvas}{bg=#1}
+    \begin{frame}[plain, c]
+        \begin{center}
+        \color{white} \Huge \textbf{\MakeUppercase{#2}}
+        \end{center}
+    \end{frame}
+    }
+}
+
+
+\setbeamertemplate{title page}{
+    \begin{minipage}[t][\paperheight][t]{\textwidth}
+        
+        \vspace{1.5cm}
+        {\usebeamercolor[fg]{title}
+        \begin{flushleft}
+        \usebeamerfont{title}\huge\textbf{\MakeUppercase{\inserttitle}}
+        \end{flushleft}
+        }
+        \vspace{0.25cm}
+        \begin{tikzpicture}
+            \fill[RubricBlack] (0,0) rectangle (\textwidth, 0.1);
+        \end{tikzpicture}
+
+        \vspace{1cm}
+        {\small\textbf{\insertauthor} \quad | \quad vinagres@univ-grenoble-alpes.fr \quad | \quad \insertinstitute}
+        
+        \vfill
+        
+        % The Academic Jury/Supervisor Grid
+        % \begin{tikzpicture}\fill[RubricBlack] (0,0) rectangle (\textwidth, 0.02);\end{tikzpicture}
+        % \vspace{0.2cm}        
+    \end{minipage}
+}
+
+\usepackage[newfloat]{minted}
+\usemintedstyle{vs}
+
+
+\setbeamertemplate{footnote}{%
+  \parindent 0em\noindent%
+  \raggedright
+  \usebeamercolor{footnote}\hbox to 0.8em{\hfil\insertfootnotemark}\insertfootnotetext\par%
+}
+
+% --- METADATA ---
+\title{Physical Unclonable Functions (PUFs) y Tecnologías Emergentes para el futuro de la seguridad}
+\author{Sergio Vinagrero Gutiérrez}
+\date{2026-02-04}
+\institute{TIMA Laboratory}
+
+\begin{document}
+
+% \begin{frame}
+% \maketitle
+% \end{frame}
+\frame[plain]{\titlepage}
+
+
+\begin{frame}{Un fallo, millones en pérdidas}
+	% \vspace*{-1em}
+	\begin{columns}[c]
+		\begin{column}{.7\textwidth}
+			\begin{itemize}
+				\item \textbf{PlayStation 3 (Sony, 2010)}
+				\item Sistema de firma digital para proteger el software
+				\item Error criptográfico:
+				      \begin{itemize}
+					      \item Uso de un número aleatorio constante (nonce)
+					      \item Recuperación de la clave privada
+				      \end{itemize}
+				\item Consecuencia:
+				      \begin{itemize}
+					      \item Homebrew (Bueno para los usuarios :D)
+					      \item Copias no autorizadas (Malo para la empresa)
+					      \item Pérdidas económicas masivas (Peor todavía)
+				      \end{itemize}
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{.3\textwidth}
+			\begin{figure}
+				\hspace*{-3cm}\includegraphics[width=.9\textwidth]{random_number.png}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}{El mayor enemigo de Nintendo}
+	\vspace*{-2em}
+	\begin{columns}[t]
+		\begin{column}{.6\textwidth}
+			\begin{itemize}
+				\item \textbf{Nintendo Switch (2018)}
+				\item Vulnerabilidad en el \textbf{BootROM} del SoC (NVIDIA Tegra X1)
+				\item El BootROM:
+				      \begin{itemize}
+					      \item Es código inmutable
+					      \item Se almacena en \textbf{memoria de solo lectura}
+				      \end{itemize}
+
+				\item Ataque:
+				      \begin{itemize}
+					      \item Cortocircuito de pines con un \emph{clip} o \emph{paperclip}
+					      \item Entrada en modo de recuperación (RCM)
+					      \item Ejecución de código no autorizado
+				      \end{itemize}
+
+				\item Consecuencia:
+				      \begin{itemize}
+					      \item Homebrew y Piratería
+					      \item \textbf{Vulnerabilidad imposible de parchear por software}
+				      \end{itemize}
+			\end{itemize}
+		\end{column}
+		\begin{column}{.4\textwidth}
+			\begin{figure}
+				\centering
+				\includegraphics[width=.5\textwidth]{figures/switch_pin.jpg}
+				% \vspace*{-1em}
+				\caption{Imagen de \url{https://noirscape.github.io/RCM-Guide/}}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+
+\impactslide{¿Cómo sabe un programa que no ha sido manipulado?}
+
+\begin{frame}{Raíz de confianza en hardware}
+	La \textbf{raíz de confianza} (Root of Trust) es el elemento fundamental sobre el que se construye la seguridad de un sistema.
+
+	\vspace{1em}
+	La raíz de confianza debe ser:
+	\begin{itemize}
+		\item Intrínseca al hardware
+		\item Difícil de copiar o clonar
+		\item Accesible de forma controlada
+	\end{itemize}
+
+	\vspace{1em}
+
+	El problema es que un secreto almacenado puede ser leído, copiado o extraído.
+
+	\vspace{1em}
+	\textbf{¿Puede una memoria ser una raíz de confianza?}
+\end{frame}
+
+\begin{frame}{Por qué las NVM no son una buena raíz de confianza}
+	\vspace*{-2em}
+
+	\begin{columns}[t]
+		\begin{column}{.5\textwidth}
+			\begin{itemize}
+				\item Las NVM embebidas (Flash, eFuse, EEPROM) retienen información sin alimentación
+
+				\item \textbf{Almacenan secretos de forma estática}
+
+				\item Debido a su importancia, son el objetivo prioritario de atacantes:
+				      \begin{itemize}
+					      \item Lectura directa
+					      \item Ataques invasivos (decapado, FIB)
+					      \item Canales laterales (corriente, EM, fotones)
+				      \end{itemize}
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[width=.95\textwidth]{Photon-emissions-image-with-10X-objective-of-PIC16F687-with-SRAM-in-a-photon-emissions.png}
+				\caption{Ataque de emisión de fotones en Cortex-M0 SRAM en "Quiescent photonics side channel analysis: Low cost SRAM readout attack"}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\impactslide{¿Y si la clave no se almacena, no existe como dato y se genera solo cuando se necesita?}
+
+\begin{frame}{Material}
+	Las diapositivas, material, notebook y datos experimentales están disponibles en Github:\par
+    \vspace*{2em}
+    \url{https://github.com/servinagrero/workshop_puf_meristors.git}
+\end{frame}
+
+% \begin{frame}{El plan}
+% 	\begin{tabular}{lr}
+% 		Introduccion           & 20min \\
+% 		Taxonomia de PUFs      & 15min \\
+% 		Métricas y Análisis    & 15min \\
+% 		Descanso               & 5min  \\
+% 		diseño y Problemas     & 30min \\
+% 		Workshop               & 30min \\
+% 		Descanso               & 5min  \\
+% 		Workshop               & 30min \\
+% 		Tecnologias Emergentes & 30min \\
+% 	\end{tabular}
+% \end{frame}
+
+
+\begin{frame}{¿Quién soy yo?}
+	\begin{columns}[c]
+		\begin{column}{.6\textwidth}
+			\vspace*{-2em}
+			\begin{itemize}
+				\item Grado en Ingeniería Industrial Electrónica Y Automática en UC3M
+				\item Master en Wireless Integrated Communication Systems (WICS) en Université Grenoble Alpes
+				\item Doctorado en \textit{Métodos para el diseño, modelado y la evaluación de la calidad de Physical Unclonable Functions (PUFs)}
+				\item Postdoctorado en el proyecto NEUROPULS para el desarrollo de protocolos de autenticación resistentes al aprendizaje automático basados en PUFs
+			\end{itemize}
+		\end{column}
+		\begin{column}{.4\textwidth}
+			\begin{figure}
+				\vspace*{-2em}
+				\includegraphics[width=.6\textwidth]{uc3m.png}
+				\vspace*{-0.5em}
+				\caption{Campus de la UC3M en Leganés}
+			\end{figure}
+			\begin{figure}
+				\vspace*{-1em}
+				\includegraphics[width=.6\textwidth]{grenoble_city.jpg}
+				\vspace*{-0.5em}
+				\caption{Ciudad de Grenoble, Francia}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}{¿Cómo se fabrican los circuitos?}
+	\vspace{-1em}
+	\begin{figure}
+		\centering
+		\includegraphics[width=.5\textwidth]{asml-20201231_g8.jpg}
+		\caption{Proceso de Fotolitografía}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{La vanguardia de la fotolitografía}
+	\begin{columns}[c]
+		\begin{column}{.4\textwidth}
+			\vspace*{-3em}
+			\begin{itemize}
+				\item Resolución de $\sim$ \textbf{2 nm}
+				\item \textbf{185–220} obleas por hora (wph)
+				\item Coste aproximado de 400 M\texteuro
+			\end{itemize}
+		\end{column}
+		\begin{column}{.6\textwidth}
+			\begin{figure}
+				\centering
+				\vspace*{-1em}
+				\includegraphics[width=.95\textwidth]{newsroom-intel-high-na-euv-3-1024x683.jpg}
+				% \vspace*{-1em}
+				\caption{Máquina de ASML para "High NA EUV Photolithography"}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}{La fotolitografía no es perfecta}
+	\begin{columns}[t]
+		\begin{column}{.6\linewidth}
+			\begin{itemize}
+				\item Como todo en esta vida, la fotolitografía no es perfecta
+
+				\item \textit{Line edge rougness}, errores de alineación, variaciones en la dosis de dopado…
+
+				\item La propia luz se deforma al pasar por los espejos y las lentes
+				      \begin{itemize}
+					      \item Optical Proximity Correction (OPC) y Computational Lithography
+				      \end{itemize}
+
+				\item Estos efectos físicos producen \textbf{variaciones geométricas y eléctricas microscópicas} entre dispositivos incluso en el mismo chip.
+			\end{itemize}
+		\end{column}
+		\begin{column}{.4\linewidth}
+			\vspace*{-3em}
+			\begin{figure}
+				\centering
+				\includegraphics[width=.9\textwidth]{figures/die_al_16.jpg}
+				\vspace*{-0.5em}
+				\caption{Variabilidad de frecuencia con respecto a la posición en la oblea. Datos de Infineon}
+			\end{figure}
+			\vspace*{-0.5em}
+			\begin{figure}
+				\centering
+				% https://siliconvlsi.com/optical-proximity-correction-opc-in-vlsi/
+				\includegraphics[width=.7\textwidth]{figures/Optical-Proximity-Correction-1.png}
+				\vspace*{-0.5em}
+				\caption{Proceso de Optical Proximity Correction. Imagen extraída de https://siliconvlsi.com}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}{Biométrica del Silicio}
+	\vspace*{-2em}
+	\begin{itemize}
+		\item Todas estas pequeñas imperfecciones hacen que el funcionamiento de nuestro circuito no sea tal y como se desea
+
+		\item Podemos explotar estas pequeñas \textbf{variaciones aleatorias} para generar \textbf{secretos que sean únicos, dependan del dispositivo, y no se puedan manipular}
+	\end{itemize}
+
+	\begin{columns}[t]
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\centering
+				% https://spie.org/publications/spie-publication-resources/optipedia-free-optics-information/fg06_p1-2_semiconductor_lithography
+				\includegraphics[width=.4\textwidth]{FG06_P02_SL.jpg}
+				\caption{Distintas etapas en el proceso de fotolitografía}
+				\vspace*{-1.5em}
+			\end{figure}
+		\end{column}
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\centering
+				\includegraphics[width=.6\textwidth]{photolithography_metals.jpg}
+				\caption{Diversos niveles de interconexión de los transistores}
+				\vspace*{-1.5em}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}{¿El tamaño importa?}
+	¿Teniendo dos circuitos idénticos, fabricados con 2 nodos de tecnología distinta, cuál presentaria más variabilidad?
+
+	\vspace*{2em}
+
+	\begin{enumerate}
+		\item $\SI{65}{\nano\metre}$
+		\item $\SI{28}{\nano\metre}$
+		\item Tendrían la misma
+	\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Leyes de Moore y Pelgrom}
+	\begin{columns}[t]
+		\begin{column}{.5\textwidth}
+			\textbf{Ley de Moore}
+
+			\begin{itemize}
+				\item El número de transistores por circuito integrado crece exponencialmente
+				\item La reducción del nodo tecnológico permite, más transistores, mayor densidad y menor área por dispositivo
+			\end{itemize}
+
+			\vspace{0.5em}
+			\textbf{Ley de Pelgrom}
+
+			\begin{itemize}
+				\item La variabilidad entre dispositivos aumenta al reducir el área
+				\item La variabilidad está ligada a efectos estadísticos del proceso
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{.5\textwidth}
+			\vspace*{-2em}
+			\begin{figure}
+				\centering
+				\includegraphics[width=.75\textwidth]{figures/1920px-Moore's_Law_Transistor_Count_1970-2020.png}
+				% \vspace*{-1.5em}
+			\end{figure}
+
+			\vspace{1em}
+			\begin{equation*}
+				\sigma \propto \frac{1}{\sqrt{W \cdot L}}
+			\end{equation*}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\section{Physical Unclonable Functions (PUFs)}
+
+\begin{frame}{Physical Unclonable Functions (PUFs)}
+	\begin{figure}
+		\centering
+		\vspace*{1em}
+		\includegraphics[width=.95\textwidth]{figures/puf_biometrics.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Taxonomía de PUFs}
+	\begin{columns}[t]
+		\begin{column}{.5\linewidth}
+			\textbf{Weak PUFs}
+			\begin{itemize}
+				\item Sus CRPs escalan linealmente con su tamaño
+				\item Número limitado de CRPs (128, 256, 512 bits)
+				\item Usadas para clavas o identificadores de dispositivos
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{.5\linewidth}
+			\textbf{Strong PUFs}
+			\begin{itemize}
+				\item Sus CRPs escalan exponencialmente con su tamaño
+				\item Número inmenso de CRPs ($> 2^{80}$)
+				\item Se utilizan para autenticación recíproca o sistemas de verificación complejos
+			\end{itemize}
+		\end{column}
+	\end{columns}
+
+	\vspace*{1.5em}
+	\begin{figure}
+		\centering
+		\includegraphics[width=.85\textwidth]{entropy_sources.png}
+		\caption{Distintas fuentes de entropía que se pueden utilizar}
+	\end{figure}
+\end{frame}
+
+
+\begin{frame}{Visión global}
+	\begin{columns}[t]
+		\begin{column}{.6\linewidth}
+			\begin{itemize}
+				\item Como diseñadores tenemos que tener una visión holística de todos las dificultades y ataques
+
+				\item \textbf{La seguridad no es absoluta, es relativa}
+
+				\item En esta presentación pondremos el foco en las fuentes de entropía, el diseño y su calidad
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{.4\linewidth}
+			\centering
+			\begin{figure}[ht]
+				\centering
+				\vspace*{-2em}
+				\includegraphics[scale=0.5]{overview_challenges.png}
+				\vspace*{-0.5em}
+				\caption{Vista general de las dificultades que a la hora de disenar y usar PUFs}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{SRAM PUF}
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			\begin{itemize}
+				\item Una celda SRAM se compone de 2 inversores cruzados
+				\item Debido a la variabilidad, cada inversor acaba siendo ligeramente mayor o menor
+				\item Al encenderse, cada celda tiende a un estado aleatorio (0 o 1)
+				\item Este patrón inicial actúa como una firma fija del chip.
+				\item \textbf{La arquitectura de las celdas y de la memoria SRAM tiene un gran impacto en la calidad del patrón}
+			\end{itemize}
+
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			% \includegraphics[width=.99\linewidth]{figures/SRAM_cell.png}
+
+			% https://www.baeldung.com/cs/tikz-draw-existing-image
+			\begin{figure}
+				\begin{tikzpicture}[x=1mm,y=1mm]
+					% 1) Place the image at (0,0)
+					\node[anchor=south west, inner sep=0] (img) at (0,0)
+					{\includegraphics[width=6cm]{SRAM_cell.png}};
+
+					% 2) Determine the upper-right corner of the image node
+					\path (img.north east) coordinate (imgNE);
+
+					% 3) Draw a light grid from (0,0) to (imgNE)
+					% \draw[step=10,lightgray,very thin] (0,0) grid (imgNE);
+
+					\draw[blue, thick, dashed] (1.7cm,1cm) rectangle (2.8cm,3cm);
+					\filldraw[blue] (4cm,2cm) circle (0.75);
+
+					\draw[red, thick, dashed] (3.2cm,1cm) rectangle (4.4cm,3cm);
+					\filldraw[red] (2.05cm,1.9cm) circle (0.75);
+
+				\end{tikzpicture}
+				\caption{Diagrama de una típica celda SRAM 6T}
+			\end{figure}
+
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Patrones en SRAM PUF}
+	\begin{columns}[t]
+		\begin{column}{.4\linewidth}
+			Que queremos obtener
+
+			\begin{figure}
+				\centering
+				% \vspace*{-1em}
+				\includegraphics[width=.8\textwidth]{sram_heatmap_random.png}
+			\end{figure}
+		\end{column}
+
+		\begin{column}{.6\linewidth}
+			Que se suele obtener…
+
+			\begin{figure}
+				\centering
+				% \vspace*{-1em}
+				\includegraphics[width=.9\textwidth]{sram_heatmap.png}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Arquitectura SRAM PUF}
+	\begin{columns}[t]
+		\begin{column}{.5\linewidth}
+			\vspace*{-2em}
+			\begin{itemize}
+				\item La calidad de una sola celda no determina totalmente la calidad del SRAM PUF
+
+				\item Depende en gran medida de la arquitectura, diseño global, enrutado…
+
+				\item Crear y probar variaciones de grandes diseños puede ser muy complejo
+
+				\item Mínima ayuda de DRC y LVS dado que se suelen crear en menor tamaño que el resto del circuito (más celdas por unidad de área)
+
+				\item OpenRAM: An open-source static random access memory (SRAM) compiler.
+				      \url{https://openram.org/}
+
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{.5\linewidth}
+			\begin{figure}
+				\centering
+				\vspace*{-2em}
+				\includegraphics[width=.9\linewidth]{SCMOS_16kb_sram.jpg}
+				\caption{Imagen de un diseño de SRAM de 16kb de OpenRAM}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}{PUFs "Diferenciales"}
+	\begin{columns}[t]
+		\begin{column}{.5\linewidth}
+			% Introducir brevemente los PUF que miden diferencias entre caminos nominalmente idénticos (p.ej., dos cadenas de inversores en paralelo). Cada bit se basa en cuál de los dos caminos es “más rápido” o cuál llega primero a cierto umbral. Subrayar que son conceptualmente similares al Arbiter PUF pero sin latch final.
+			\begin{itemize}
+				\item Comparación entre varios componentes \textbf{diseñados idénticamente}
+
+				\item Debido a la variabilidad, cada componente, se comporta de manera ligeramente diferente
+
+				\item Las magnitudes suelen ser analógicas y hay que digitalizarlas
+
+				\item Las \textbf{respuestas} deben de ser \textbf{únicas por dispositivo y repetibles}, o la clave puede cambiar cada vez que se interroga al PUF
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{.5\linewidth}
+			\begin{figure}
+				\centering
+				\vspace*{-1em}
+				\includegraphics[width=.99\textwidth]{difference_reliability_gaussian.png}
+			\end{figure}
+
+			\vspace*{-0.5em}
+			\begin{equation*}
+				\mathrm{Respuesta} = \underbrace{\mathop{sign}}_{\text{Digitalizacion}}(\overbrace{\mathrm{Medición\; 1} - \mathrm{Medición\; 2}}^{\text{Diferencia}})
+			\end{equation*}
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}{Ring Oscillator (RO) PUF}
+	\begin{columns}[c]
+		\begin{column}{.6\linewidth}
+			\begin{itemize}
+				\item Consiste en comparar la diferencia de frecuencia de "anillos oscilantes"
+				\item En ASIC conviene separar físicamente los ROs para aumentar variabilidad
+				\item En FPGA queremos pares de RO que estén cerca (si están muy lejos hay muchísima variabilidad)
+				\item En FPGA es crucial fijar LUTs y enrutado para evitar optimizaciones del sintetizador.
+				\item El enrutado puede introducir sesgos sistemáticos: hay que balancear diseño para que la diferencia entre rutas sea mínima salvo por variación aleatoria.
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{.4\linewidth}
+			\begin{figure}
+				\centering
+				% \vspace*{-2em}
+				\includegraphics[width=.99\textwidth]{RO_PUF.png}
+				\caption{Diseño clásico de un Ring Oscillator PUF}
+				% \vspace*{-1em}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo de implementación en VHDL}
+	\begin{columns}[t]
+		\begin{column}{.5\linewidth}
+			\vspace*{-2em}
+			\begin{itemize}
+				\item Hay multiples maneras de crear un RO PUF
+
+				\item El proceso es ligeramente distinto para ASIC y para FPGA
+
+				\item Hay que asegurarse que la fuente de entropía proviene solamente de las diferencias de frecuencias y que no introducimos ningún sesgo
+			\end{itemize}
+
+			\vspace*{1em}
+			% https://embdev.net/topic/362828
+			\begin{minted}[mathescape, breaklines, breakanywhere, fontsize=\footnotesize]{vhdl}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity ro_puf is
+    Port ( clk_i : in  STD_LOGIC;
+           rst_i : in  STD_LOGIC;
+        clk_o : buffer  STD_LOGIC);
+end ro_puf;
+\end{minted}
+		\end{column}
+		\begin{column}{.5\linewidth}
+
+			\begin{minted}[mathescape, breaklines, breakanywhere, fontsize=\footnotesize, highlightlines={3-4}]{vhdl}
+architecture Behavioral of ro_puf is
+  signal chain :std_logic_vector(30 downto 0);
+  attribute syn_keep: boolean;
+  attribute syn_keep of chain: signal is true;
+begin
+  gen_chain:
+  for i in 1 to 30 generate
+    chain(i) <= not chain(i-1);
+  end generate;
+  chain(0) <= not chain(30) or not rst_i;
+
+t_FF: process(rst_i, chain(0))
+  begin
+    if rst_i = '0' then
+      clk_o <= '0';
+    elsif rising_edge(chain(0)) then
+      clk_o <= not clk_o;
+    end if;
+  end process t_FF;
+end Behavioral;
+\end{minted}
+
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]{Constraints VHDL}
+	\begin{columns}[t]
+		\begin{column}{.5\textwidth}
+			\begin{itemize}
+				\item En el caso de FPGAs debemos fijar las LUTs y el enrutado
+
+				\item Método más común es usar directrices como \texttt{DONT\_TOUCH} o fijar las LUTS a mano (Mediante coordenadas)
+
+				\item El retardo de un inversor es "0" asi que hay que simular después de Place \& Route (\textbf{Post-Implementation})
+			\end{itemize}
+		\end{column}
+		\begin{column}{.5\textwidth}
+			En el fichero de constraints .xdc podemos usar las siguientes directivas
+
+			Para fijar los LUTS
+			\begin{minted}[mathescape, breaklines, breakanywhere, fontsize=\footnotesize]{tcl}
+set_property BEL <LUT name> [get_cells {<Inverter_name>}]
+set_property LOC <SLICE Coords> [get_cells {<Inverter_name>}]
+\end{minted}
+
+			Para fijar los PINs
+			\begin{minted}[mathescape, breaklines, breakanywhere, fontsize=\footnotesize]{tcl}
+set_property LOCK_PINS {<In:Out>} [get_cells {<Inverter_name>}]
+set_property LOCK_PINS {I0:A6 I1:A5 I2:A4 I3:A3 I4:A2 I5:A1} [get_cells {PUF/ring0[*].ro0/LUT6_NAND0}]
+\end{minted}
+
+			Para habilitar bucles combinacionales
+			\begin{minted}[mathescape, breaklines, breakanywhere, fontsize=\footnotesize]{tcl}
+set_property ALLOW_COMBINATORIAL_LOOPS true [get_nets {MyPUF/ring0[0].ro0/o}]
+\end{minted}
+
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Hay que corregir los errores}
+	\begin{columns}
+		\begin{column}{.6\textwidth}
+			\begin{itemize}
+				\item ECCs
+				      \begin{itemize}
+					      \item Hamming Codes, Reed-Solomon, BCH, LDPC, Polar Codes
+					      \item Si la tasa de errores es alta, hay que usar \textit{debiasing schemes} (con los problemas que conlleva)
+				      \end{itemize}
+				\item Fuzzy Extractors
+				      \begin{itemize}
+					      \item Son muy eficaces
+					      \item Suelen ser más complejos y también requieren \textit{helper data}
+				      \end{itemize}
+			\end{itemize}
+
+			\textit{Sin embargo, los PUFs son funciones físicas muy complejas, y se requieren más investigación}
+		\end{column}
+		\begin{column}{.4\textwidth}
+			\begin{minted}[breaklines, breakanywhere, fontsize=\footnotesize]{python}
+import numpy as np
+
+puf_bits = np.array([1, 0, 1, 1])
+
+def hamming_encode(bits):
+   d1, d2, d3, d4 = bits
+   p1 = d1 ^ d2 ^ d4
+   p2 = d1 ^ d3 ^ d4
+   p3 = d2 ^ d3 ^ d4
+   return np.array([p1, p2, d1, p3, d2, d3, d4])
+
+def hamming_decode(code):
+   p1, p2, d1, p3, d2, d3, d4 = code
+   s1 = p1 ^ d1 ^ d2 ^ d4
+   s2 = p2 ^ d1 ^ d3 ^ d4
+   s3 = p3 ^ d2 ^ d3 ^ d4
+   syndrome = s1 + (s2 << 1) + (s3 << 2)
+
+   corrected = code.copy()
+   if syndrome != 0:
+       corrected[syndrome - 1] ^= 1
+
+   return corrected[[2,4,5,6]]
+	\end{minted}
+
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+\section{Métricas y Análisis}
+
+\begin{frame}{Como medimos la calidad de un PUF}
+	\begin{columns}[t]
+		\begin{column}{0.45\textwidth}
+			Se han propuesto muchas métricas, tests y maneras de medir la calidad de PUFs
+
+			Las más utilizadas a día de hoy son las propuestas por Maiti~\cite{Maiti2010}
+			\begin{itemize}
+				\item \textcolor{orange!60!black}{Uniformity}: Mide la distribución de valores en cada dispositivo
+				\item \textcolor{red!60!black}{Bit-aliasing}: Mide la distribución de valores en cada respuesta
+				\item \textcolor{green!60!black}{Uniqueness}: Mide como de diferentes los dispositivos son entre si
+				\item \textcolor{blue!60!black}{Reliability}: Mide la fiabilidad de cada respuesta
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{0.55\textwidth}
+			\begin{figure}
+				\centering
+				\vspace*{-2em}
+				\includegraphics[width=.9\textwidth]{figures/Explanation_Calculation_Metrics.png}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Hay una relación entre entropía y fiabilidad}
+
+	\begin{columns}[c]
+		\begin{column}{.25\textwidth}
+			\begin{enumerate}
+				\item Del centro
+				\item De la mitad
+				\item De los extremos
+				\item Da igual
+			\end{enumerate}
+		\end{column}
+		\begin{column}{.75\textwidth}
+			\centering
+			\begin{figure}
+				\centering
+				% \vspace*{-1em}
+				\includegraphics[width=.99\textwidth]{entropy_reliability_gaussian.png}
+				\vspace*{-1em}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+
+\end{frame}
+
+
+\begin{frame}{Relación entre entropía y fiabilidad}
+	La calidad de un PUF está determinada por la relacion entre \textbf{entropía} y \textbf{fiabilidad}.
+
+	\vspace{0.5em}
+	\begin{itemize}
+		\item \textbf{Alta entropía}
+		      \begin{itemize}
+			      \item Respuestas más impredecibles
+			      \item Mayor sensibilidad a la variabilidad
+			      \item Más susceptibles al ruido y a cambios ambientales
+		      \end{itemize}
+
+
+		\item \textbf{Alta fiabilidad}
+		      \begin{itemize}
+			      \item Respuestas más estables en el tiempo
+			      \item Menor tasa de error intra-dispositivo
+			      \item Normalmente menor entropía utilizable
+		      \end{itemize}
+	\end{itemize}
+
+
+	\vspace*{1em}
+
+	\textbf{Diseñar un PUF implica equilibrar estabilidad, entropía, consumo y área.}
+\end{frame}
+
+\begin{frame}{Ataques}
+	\begin{columns}[t]
+		\begin{column}{.5\textwidth}
+			\begin{itemize}
+				\item Hay todo un abanico de ataques invasivos y no invasivos para recuperar claves de Weak PUFs
+				\item Focused Ion Beam (FIB), Envejecimiento acelerado (NBTI)
+				\item No profundizaremos en los posibles ataques
+				\item Pero hay que tener en cuenta que las Vulnerabilidades de un circuito no siempre vienen de donde se esperan
+			\end{itemize}
+		\end{column}
+		\begin{column}{.5\textwidth}
+			\vspace*{-1em}
+			\begin{figure}
+				\begin{subfigure}{.49\textwidth}
+					\includegraphics[width=.95\textwidth]{sram_fib_1.png}
+				\end{subfigure}
+				\begin{subfigure}{.49\textwidth}
+					\includegraphics[width=.95\textwidth]{sram_fib_2.png}
+				\end{subfigure}
+				\caption{Ataque en SRAM-PUF mediante FIB\cite{Helfmeier2013}}
+			\end{figure}
+			\vspace*{-1em}
+			\begin{figure}
+				\centering
+				\includegraphics[width=.9\textwidth]{nbti_attack_fpga.png}
+				\caption{Ataque mediante NBTI en RO-PUF en FPGA\cite{Cook2022}}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+
+\end{frame}
+
+\section{Workshop Práctico: Extracción y Análisis de Datos Reales}
+\impactslide{Workshop Práctico}
+
+\begin{frame}{¿Son las métricas suficientes?}
+
+	Cuál de las siguientes distribuciones no es buena?
+
+	% \vspace*{1em}
+	\begin{figure}
+		\centering
+		\includegraphics[width=.8\textwidth]{metrics_plot.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Las métricas no lo son todo}
+
+	Las métricas por si solas no nos dan toda la información.
+
+	% \vspace*{1em}
+	\begin{figure}
+		\centering
+		% \vspace*{-2em}
+		\includegraphics[width=.8\textwidth]{metrics_plot.png}
+	\end{figure}
+
+	\begin{figure}
+		\centering
+		\vspace*{-2em}
+		\includegraphics[width=.8\textwidth]{crps_heatmap.png}
+	\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Arbiter PUF}
+	\begin{columns}[c]
+		\begin{column}{.45\textwidth}
+			\begin{itemize}
+				\item diseño muy similar al RO PUF
+				\item Consiste en una \textit{carrera} entre dos señales, y el \textit{arbitro} decide quien llega primero
+				\item El camino de cada señal es seleccionado por los multiplexores
+				\item Se puede ver como una función $f: \{0, 1\}^n \rightarrow \{0,1\}$
+			\end{itemize}
+		\end{column}
+		\begin{column}{.55\textwidth}
+			\begin{figure}
+				\centering
+				% \vspace*{-1em}
+				\includegraphics[width=.85\linewidth]{arbiter_puf.png}
+			\end{figure}
+
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+% \begin{frame}{El ataque de los clones}
+
+% 	\begin{columns}[c]
+% 		\begin{column}{.35\textwidth}
+
+% 			Un esquema muy sencillito para mostrar el problema: Por ejemplo, Alice quiere saber si otra persona es su amigo, y para eso le pregunta por el nombre de la mascota. Bob response que tiene un perro llamado tiramisu.
+% 			Yo puedo estar escuchando la pregunta y la respuesta e impersonarle.
+
+% 			Hablar brevemente de PAC learning y decir que hay un tradeoff entre la reliability del PUF y la capacidad del modelado del PUF
+
+% 			No ir muy lejos en cuanto a temas de protocolo
+% 		\end{column}
+
+% 		\begin{column}{.65\textwidth}
+% 			\begin{figure}
+% 				\centering
+% 				\vspace*{-1em}
+% 				\includegraphics[width=.85\linewidth]{modeling_attack.png}
+% 			\end{figure}
+% 		\end{column}
+% 	\end{columns}
+
+% \end{frame}
+
+% \begin{frame}{Posibles contramedidas}
+% 	\begin{columns}[c]
+% 		\begin{column}{.55\textwidth}
+% 			\begin{itemize}
+% 				\item Presentar soluciones simples: el k-XOR Arbiter PUF (XOR de k salidas de k arbiters) y Arbiter con realimentación (feed-forward). Explicar que XOR aumenta la no-linealidad y complica el modelado, a costa de usar k veces más recursos y de que cada bit requiere procesar k desafíos.
+
+% 				\item	Compromiso de diseño: Anotar que estas protecciones refuerzan la seguridad pero penalizan el rendimiento (menos CRP útiles por bit generado) y consumo de área. El ingeniero debe balancear resistencia a ataques vs. complejidad de hardware
+% 				\item Nuevas arquitecturas donde la no-linealidad es la base
+% 			\end{itemize}
+% 		\end{column}
+% 		\begin{column}{.45\textwidth}
+% 			\begin{figure}
+% 				\centering
+% 				\vspace*{-1em}
+% 				\includegraphics[width=.85\linewidth]{electronics-09-01715-g002-550.jpg}
+% 				\caption{diseño de 3-XOR Arbiter PUF}
+% 			\end{figure}
+
+% 			\begin{figure}
+% 				\centering
+% 				% \vspace*{-2em}
+% 				\includegraphics[width=.85\linewidth]{tero_puf.png}
+% 				\caption{diseño del bucle del TERO-PUF}
+% 			\end{figure}
+
+% 		\end{column}
+% 	\end{columns}
+
+% \end{frame}
+
+\begin{frame}{El ataque de los clones}
+	\begin{columns}[c]
+		\begin{column}{.55\textwidth}
+
+			Consideremos un ejemplo sencillo:
+
+			\begin{itemize}
+				\item Alice quiere verificar si Bob es realmente quien dice ser.
+				\item Para ello, le hace una pregunta cuya respuesta sólo Bob debería conocer.
+			\end{itemize}
+
+			Un atacante puede:
+			\begin{itemize}
+				\item Escuchar el Challenge, y la Response
+				\item Aprender la relación entre ambos
+			\end{itemize}
+
+			En el contexto de strong PUFs, este problema se formaliza como un problema de \textbf{aprendizaje (PAC learning)}\\
+
+			Existe un compromiso entre la \textbf{fiabilidad} del PUF ySu \textbf{resistencia al modelado}\\
+		\end{column}
+
+		\begin{column}{.45\textwidth}
+			\begin{figure}
+				\centering
+				\vspace*{-1em}
+				\includegraphics[width=.75\linewidth]{modeling_attack.png}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+
+\begin{frame}{Posibles contramedidas}
+	\vspace*{-0.5em}
+	\begin{columns}[c]
+		\begin{column}{.55\textwidth}
+			\begin{itemize}
+				\item \textbf{Introducir no linealidad}
+				      \begin{itemize}
+					      \item \textbf{k-XOR Arbiter PUF}: XOR de las salidas de $k$ Arbiter PUFs
+					      \item Incrementa la complejidad del modelo
+					      \item Dificulta los ataques de aprendizaje
+				      \end{itemize}
+
+				\item \textbf{Realimentación (feed-forward)}
+				      \begin{itemize}
+					      \item La respuesta influye en etapas posteriores
+					      \item Se rompe la linealidad del modelo clásico
+				      \end{itemize}
+
+				\item \textbf{Compromiso de diseño}
+				      \begin{itemize}
+					      \item Mayor seguridad $\Rightarrow$ mayor área y consumo
+					      \item Menos CRPs útiles por bit generado
+					      \item El diseño debe equilibrar complejidad y robustez
+				      \end{itemize}
+
+				\item \textbf{Nuevas arquitecturas}
+				      \begin{itemize}
+					      \item \textbf{La no linealidad es parte intrínseca del diseño}
+				      \end{itemize}
+			\end{itemize}
+		\end{column}
+
+		\begin{column}{.45\textwidth}
+			\begin{figure}
+				\centering
+				\vspace*{-1em}
+				\includegraphics[width=.85\linewidth]{electronics-09-01715-g002-550.jpg}
+				\caption{Diseño de un Arbiter PUF 3-XOR}
+			\end{figure}
+
+			\begin{figure}
+				\centering
+				\includegraphics[width=.85\linewidth]{tero_puf.png}
+				\caption{Diseño del bucle del TERO-PUF}
+			\end{figure}
+
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+
+\section{Workshop Práctico: Modelado y Aprendizaje Automático}
+\impactslide{Workshop Práctico}
+
+
+\section{Tecnologías Emergentes: PUFs de Memristores}
+\begin{frame}{Más allá del CMOS: Memristores}
+
+	\begin{columns}
+		\begin{column}{.65\textwidth}
+			\begin{itemize}
+				\item El memristor fue originalmente "predicho" por Chua en 1971\cite{Chua1971}.
+				\item El concepto se generalizó y hoy en día se habla de \textbf{sistemas memristivos}
+
+				\item Debido a su \textbf{naturaleza estocástica} y a su \textbf{histéresis}, son una fuente de entropía con gran potencial
+
+				      \begin{itemize}
+					      \item \textbf{Device-to-Device} (D2D): Memristores en distintos dispositivos se comportaran distinto ante los mismos estímulos
+					      \item \textbf{Cycle-to-Cycle} (C2C): El mismo memristor se comportara de forma distinta en el tiempo incluso con los mismos estímulos
+				      \end{itemize}
+			\end{itemize}
+
+		\end{column}
+		\begin{column}{.35\textwidth}
+			\begin{figure}
+				\includegraphics[width=.8\textwidth]{Two-terminal_non-linear_circuit_elements.png}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{¿Cómo funciona un memristor?}
+	\begin{columns}[c]
+		\begin{column}{.4\textwidth}
+			% Ver si los estudiantes se dan cuenta que la curva de histeresis no es simetrica
+			\begin{figure}
+				\includegraphics[width=1.2\textwidth]{a-Current-voltage-I-V-curves-of-the-TiOx-based-memristor-b-Conductance-changes-of-the.png}
+				\caption{Imagen extraida de "Li, Jie, et al. "Reduction 93.7\% time and power consumption using a memristor-based imprecise gradient update algorithm." Artificial Intelligence Review 55.1 (2022): 657-677."}
+			\end{figure}
+		\end{column}
+		\begin{column}{.6\textwidth}
+			\begin{figure}
+				\centering
+				\vspace*{-2em}
+				\includegraphics[width=.7\textwidth]{Switching-model-of-the-TaOx-HfO2-memristor-using-conducting-defects-and-filaments-a.png}
+				\caption{Imagen extraida de TaOx/HfO2 memristor using conducting defects and filaments. Pseudo-Interface Switching of a Two-Terminal TaOx/HfO2 Synaptic Device for Neuromorphic Applications}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Ejemplos de arquitecturas}
+	% Hablar aqui tambien de los problemas de estas arquitecturas
+	\begin{columns}[t]
+		% Gran C2C variablity tamben implica poca reliability
+		\begin{column}{.5\textwidth}
+			Aplicar pulsos a un memristor hasta que cambie de estado y contar. El valor es único por memristor y dispositivo.
+			\begin{figure}
+				\centering
+				\includegraphics[width=.7\textwidth]{A-1-bit-memristive-memory-based-PUF-cell-that-leverages-variations-in-memristor-write.png}
+				\caption{Diseño de 1-bit memristive PUF de "Foundations of memristor based PUF architectures"}
+			\end{figure}
+		\end{column}
+		% Corrientes parasitas y formin que anaden bias sistematico
+		% Antes los arrays eran pequenos por el formin.
+		\begin{column}{.5\textwidth}
+			Programar varios memristores con un mismo número de pulsos y comparar sus resistencias finales
+			\begin{figure}
+				\centering
+				\includegraphics[width=.8\textwidth]{electronics-09-01446-g001-550.jpg}
+				\caption{Crossbar Array de "Multibit-Generating Pulsewidth-Based Memristive-PUF Structure and Circuit Implementation"}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+
+	\begin{itemize}
+		\item Ambos diseños sufren C2C y corrientes parásitas que introducen sesgos adicionales
+
+		\item Además los memristores tienden a tener menos variabilidad entre dispositivos en tecnologías actuales
+	\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Más allá del CMOS}
+	\begin{columns}
+		\begin{column}{.5\textwidth}
+			Los sistemas memristivos no son las unicas herramientas:
+			\begin{itemize}
+				\item Spin Transfor Torque (STT)
+				\item FeRAM
+				\item Fotónica
+			\end{itemize}
+
+			\textbf{Computación neuromórfica}
+			\begin{itemize}
+				\item Arquitecturas inspiradas en el cerebro
+				\item Computación distribuida y analógica
+				\item Tecnologias emergentes son aptas debido a su similaridad
+			\end{itemize}
+
+		\end{column}
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\centering
+				\vspace*{-1em}
+				\includegraphics[width=.7\textwidth]{Flexible-memristive-devices-for-neuromorphic-computing-a-Neuromorphic-computing-in-the.png}
+				\caption{Memristores para la computación neuromórfica en "Artificial Skin Perception"}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Tira y afloja}
+	\begin{columns}[c]
+		\begin{column}{.5\textwidth}
+			\begin{itemize}
+				\item Las mismas propiedades que hacen que los sistemas memristivos sean una buena fuente de entropia, hacen que su uso en seguridad no sea fiable.
+
+				\item Son analogicas, por lo que siempre habra pequenas variaciones
+
+				\item Son sensibles a corrientes parasitas y a ruido
+
+				\item La variacion C2C hace que sea muy dificil crear un PUF fiable
+			\end{itemize}
+		\end{column}
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\centering
+				\vspace*{-2em}
+				\includegraphics[width=.8\textwidth]{tug_of_war.png}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}{Resumen y conclusiones}
+	\begin{itemize}
+		\item La seguridad basada en NVM presenta vulnerabilidades reales.
+		\item La raíz de confianza (Root of Trust) en hardware es un elemento crítico de cualquier sistema seguro.
+		\item La variabilidad de fabricación, tradicionalmente un problema, puede explotarse como recurso.
+		\item Las PUFs permiten generar secretos sin almacenarlos explícitamente en memoria.
+		\item Existen distintos tipos de PUFs (weak y strong), cada uno con ventajas y limitaciones.
+		\item El diseño de PUFs implica compromisos entre entropía, fiabilidad, área y resistencia a ataques.
+		\item Tecnologías emergentes, como sistemas memristivos, abren nuevas posibilidades y desafíos.
+	\end{itemize}
+
+	\vspace{0.5em}
+	\textbf{Mensaje final:} la seguridad moderna requiere soluciones físicas adaptadas al proceso y a la tecnología.
+\end{frame}
+
+\impactslide{Q \& A}
+
+\begin{frame}[allowframebreaks]
+	\frametitle{References}
+	\printbibliography
+\end{frame}
+
+\end{document}
