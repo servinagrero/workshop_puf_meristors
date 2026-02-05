@@ -1,0 +1,81 @@
+\documentclass[border=5pt]{standalone}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{emoji} 
+\usetikzlibrary{positioning, arrows.meta, calc, shapes.symbols, shadows}
+
+% Colores temáticos
+\definecolor{verificadorColor}{HTML}{E3F2FD}
+\definecolor{pufColor}{HTML}{E8F5E9}
+\definecolor{ataqueColor}{HTML}{FFEBEE}
+\definecolor{accentColor}{HTML}{C62828}
+
+\begin{document}
+
+\begin{tikzpicture}[
+        node distance=2.5cm,
+        block/.style={
+            draw, rectangle, rounded corners=4pt, align=center, 
+            minimum width=2.8cm, minimum height=1.6cm, thick,
+            fill=white, drop shadow={opacity=0.3}
+        },
+        ataque/.style={
+            block, fill=ataqueColor, draw=accentColor
+        },
+        arrow/.style={-{Stealth[scale=1.2]}, thick},
+        labelStyle/.style={font=\small\sffamily, midway}
+    ]
+
+    % --- NODOS ---
+    \node[block, fill=verificadorColor] (A) {
+        \textbf{SERVIDOR}\\ \textit{(Verificador)}
+    };
+    
+    \node[block, right=of A, fill=pufColor] (B) {
+        \textbf{DISPOSITIVO}\\ \textit{(Strong PUF)}
+    };
+
+    % Nodo intermedio invisible para los cálculos de interceptación
+    \coordinate (intermedio) at ($(A.east)!0.5!(B.west)$);
+
+    \node[ataque, below=2.5cm of intermedio] (E) {
+        \textbf{ATACANTE}\\ \textit{(Eavesdropping)}
+    };
+
+    % \node[cloud, draw, cloud puffs=16, aspect=1.5, below=1.8cm of E, 
+    %       fill=white, thick, minimum width=2.5cm] (M) {
+    %     \textbf{CLON DIGITAL}\\ \textit{Modelo ML Predictivo}
+    % };
+    \node[ataque, below=1.2cm of E] (M) {
+        \textbf{CLON DIGITAL}\\ \textit{Modelo ML Predictivo}
+    };
+
+    % --- FLUJO DE DATOS ---
+    % Envío de Desafío (usando ángulos para separar líneas)
+    \draw[arrow] (A.20) -- (B.160) node[labelStyle, above] {Desafío ($C_i$)};
+    
+    % Envío de Respuesta
+    \draw[arrow] (B.200) -- (A.340) node[labelStyle, below] {Respuesta ($R_i$)};
+
+    % Interceptación corregida
+    % Calculamos los puntos de origen en el "aire" entre A y B
+    \coordinate (puntoC) at ($(A.east)!0.4!(B.west)$[yshift=-2em]);
+    \coordinate (puntoR) at ($(A.east)!0.6!(B.west)$);
+
+    \draw[arrow, dashed, accentColor] (puntoC) -- (E.110)
+        node[labelStyle, left, xshift=-2pt, yshift=-1em] {Observa $C$};
+    \draw[arrow, dashed, accentColor] (puntoR) -- (E.70)
+        node[labelStyle, right, xshift=2pt, yshift=-1em] {Observa $R$};
+
+    % Entrenamiento
+    \draw[arrow] (E) -- (M) node[labelStyle, right] {Entrenamiento del modelo};
+
+    \draw[arrow] (E) -| (A.south) node[labelStyle, right, xshift=-2em, yshift=-1em] {Suplantación};
+
+    % Anotaciones
+    % \node[draw=none, right=0.2cm of B, font=\tiny\itshape, text=gray, align=left] {Hardware\\Impredecible};
+    % \node[draw=none, left=0.2cm of M, font=\tiny\itshape, text=accentColor, align=right] {Software\\Predecible};
+
+\end{tikzpicture}
+\end{document}
